@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Talk To The World</title>
+</head>
+<body>
+    <header>
+        <h1>Welcome to Talk To The World</h1>
+        <nav>
+            <a href="#profile">Profile</a> |
+            <a href="#posts">Posts</a> |
+            <a href="#create-post">Create Post</a>
+        </nav>
+    </header>
+
+    <section id="profile">
+        <h2>Your Profile</h2>
+        <form>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username"><br><br>
+            <label for="bio">Bio:</label><br>
+            <textarea id="bio" name="bio" rows="4" cols="50"></textarea><br><br>
+            <button type="submit">Save</button>
+        </form>
+    </section>
+
+    <section id="posts">
+        <h2>Posts</h2>
+        <article>
+            <h3>User1</h3>
+            <p>This is the first post on Talk To The World!</p>
+        </article>
+        <article>
+            <h3>User2</h3>
+            <p>Excited to be here!</p>
+        </article>
+    </section>
+
+    <section id="create-post">
+        <h2>Create a Post</h2>
+        <form>
+            <label for="post-content">Your Post:</label><br>
+            <textarea id="post-content" name="post-content" rows="4" cols="50"></textarea><br><br>
+            <button type="submit">Post</button>
+        </form>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Talk To The World</p>
+    </footer>
+</body>
+</html>
