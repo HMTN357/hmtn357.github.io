@@ -33,7 +33,14 @@
                 return;
             }
 
-            alert('Your post has been created:\n' + postContent);
+            const username = localStorage.getItem('username') || 'Anonymous';
+            const posts = JSON.parse(localStorage.getItem('posts')) || [];
+
+            // Add new post
+            posts.push({ username: username, content: postContent });
+            localStorage.setItem('posts', JSON.stringify(posts));
+
+            alert('Your post has been saved!');
             document.getElementById('post-content').value = ''; // Clear the textarea
         }
     </script>
