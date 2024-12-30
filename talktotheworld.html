@@ -19,36 +19,76 @@
         <h2>Your Profile</h2>
         <form>
             <label for="username">Username:</label>
-            <input type="text" id="username" name="username"><br><br>
+            <input type="text" id="username" name="username" placeholder="Enter your username"><br><br>
             <label for="bio">Bio:</label><br>
-            <textarea id="bio" name="bio" rows="4" cols="50"></textarea><br><br>
-            <button type="submit">Save</button>
+            <textarea id="bio" name="bio" rows="4" cols="50" placeholder="Write something about yourself"></textarea><br><br>
+            <button type="button" onclick="saveProfile()">Save</button>
         </form>
     </section>
 
     <section id="posts">
         <h2>Posts</h2>
-        <article>
-            <h3>User1</h3>
-            <p>This is the first post on Talk To The World!</p>
-        </article>
-        <article>
-            <h3>User2</h3>
-            <p>Excited to be here!</p>
-        </article>
+        <input type="text" id="search-bar" placeholder="Search posts..." oninput="searchPosts()"><br><br>
+        <div id="post-list" style="max-height: 300px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;">
+            <p>No posts yet. Be the first to post!</p>
+        </div>
     </section>
 
     <section id="create-post">
         <h2>Create a Post</h2>
         <form>
             <label for="post-content">Your Post:</label><br>
-            <textarea id="post-content" name="post-content" rows="4" cols="50"></textarea><br><br>
-            <button type="submit">Post</button>
+            <textarea id="post-content" name="post-content" rows="4" cols="50" placeholder="What's on your mind?"></textarea><br><br>
+            <button type="button" onclick="addPost()">Post</button>
         </form>
     </section>
 
     <footer>
         <p>&copy; 2024 Talk To The World</p>
     </footer>
+
+    <script>
+        function saveProfile() {
+            const username = document.getElementById('username').value;
+            const bio = document.getElementById('bio').value;
+            alert('Profile Saved:\nUsername: ' + username + '\nBio: ' + bio);
+        }
+
+        function addPost() {
+            const postContent = document.getElementById('post-content').value;
+            if (!postContent.trim()) {
+                alert('Post content cannot be empty!');
+                return;
+            }
+
+            const postList = document.getElementById('post-list');
+            const newPost = document.createElement('article');
+            const username = document.getElementById('username').value || 'Anonymous';
+
+            newPost.innerHTML = `
+                <h3>${username}</h3>
+                <p>${postContent}</p>
+            `;
+
+            // Add a class for easier search
+            newPost.classList.add('post');
+            postList.appendChild(newPost);
+            document.getElementById('post-content').value = ''; // Clear the textarea
+        }
+
+        function searchPosts() {
+            const searchQuery = document.getElementById('search-bar').value.toLowerCase();
+            const posts = document.querySelectorAll('#post-list .post');
+
+            posts.forEach(post => {
+                const text = post.innerText.toLowerCase();
+                if (text.includes(searchQuery)) {
+                    post.style.display = 'block';
+                } else {
+                    post.style.display = 'none';
+                }
+            });
+        }
+    </script>
 </body>
 </html>
