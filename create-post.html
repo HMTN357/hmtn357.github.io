@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Post - Talk To The World</title>
+</head>
+<body>
+    <header>
+        <h1>Talk To The World</h1>
+        <nav>
+            <a href="talktotheworld.html">Home</a> |
+            <a href="profile.html">Profile</a> |
+            <a href="posts.html">Posts</a>
+        </nav>
+    </header>
+    <main>
+        <h2>Create a Post</h2>
+        <form>
+            <label for="post-content">Your Post:</label><br>
+            <textarea id="post-content" name="post-content" rows="4" cols="50" placeholder="What's on your mind?"></textarea><br><br>
+            <button type="button" onclick="addPost()">Post</button>
+        </form>
+    </main>
+    <footer>
+        <p>&copy; 2024 Talk To The World</p>
+    </footer>
+    <script>
+        function addPost() {
+            const postContent = document.getElementById('post-content').value;
+            if (!postContent.trim()) {
+                alert('Post content cannot be empty!');
+                return;
+            }
+
+            alert('Your post has been created:\n' + postContent);
+            document.getElementById('post-content').value = ''; // Clear the textarea
+        }
+    </script>
+</body>
+</html>
