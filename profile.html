@@ -1,1 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Talk To The World</title>
+</head>
+<body>
+    <header>
+        <h1>Talk To The World</h1>
+        <nav>
+            <a href="index.html">Home</a> |
+            <a href="posts.html">Posts</a> |
+            <a href="create-post.html">Create Post</a>
+        </nav>
+    </header>
+    <main>
+        <h2>Your Profile</h2>
+        <form>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username"><br><br>
+            <label for="bio">Bio:</label><br>
+            <textarea id="bio" name="bio" rows="4" cols="50" placeholder="Write something about yourself"></textarea><br><br>
+            <button type="button" onclick="saveProfile()">Save</button>
+        </form>
+    </main>
+    <footer>
+        <p>&copy; 2024 Talk To The World</p>
+    </footer>
+    <script>
+        function saveProfile() {
+            const username = document.getElementById('username').value;
+            const bio = document.getElementById('bio').value;
+            alert('Profile Saved:\nUsername: ' + username + '\nBio: ' + bio);
+        }
+    </script>
+</body>
+</html>
 
