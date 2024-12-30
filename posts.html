@@ -18,8 +18,46 @@
         <h2>Posts</h2>
         <input type="text" id="search-bar" placeholder="Search posts..." oninput="searchPosts()"><br><br>
         <div id="post-list" style="max-height: 300px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;">
-            <p>No posts yet. Be the first to post!</p>
+            <!-- Posts will be loaded here -->
         </div>
     </main>
     <footer>
-        <p>&copy; 
+        <p>&copy; 2024 Talk To The World</p>
+    </footer>
+    <script>
+        function loadPosts() {
+            const posts = JSON.parse(localStorage.getItem('posts')) || [];
+            const postList = document.getElementById('post-list');
+            postList.innerHTML = ''; // Clear existing posts
+
+            if (posts.length === 0) {
+                postList.innerHTML = '<p>No posts yet. Be the first to post!</p>';
+                return;
+            }
+
+            posts.forEach(post => {
+                const postElement = document.createElement('article');
+                postElement.classList.add('post');
+                postElement.innerHTML = `
+                    <h3>${post.username}</h3>
+                    <p>${post.content}</p>
+                `;
+                postList.appendChild(postElement);
+            });
+        }
+
+        function searchPosts() {
+            const searchQuery = document.getElementById('search-bar').value.toLowerCase();
+            const posts = document.querySelectorAll('#post-list .post');
+
+            posts.forEach(post => {
+                const text = post.innerText.toLowerCase();
+                post.style.display = text.includes(searchQuery) ? 'block' : 'none';
+            });
+        }
+
+        // Load posts when the page loads
+        window.onload = loadPosts;
+    </script>
+</body>
+</html>
