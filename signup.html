@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Talk To The World</title>
+</head>
+<body>
+    <header>
+        <h1>Talk To The World</h1>
+        <nav>
+            <a href="talktotheworld.html">Home</a> |
+            <a href="login.html">Login</a>
+        </nav>
+    </header>
+    <main>
+        <h2>Sign Up</h2>
+        <form>
+            <label for="signup-username">Username:</label>
+            <input type="text" id="signup-username" placeholder="Enter your username" required><br><br>
+            <label for="signup-password">Password:</label>
+            <input type="password" id="signup-password" placeholder="Enter your password" required><br><br>
+            <button type="button" onclick="signUp()">Sign Up</button>
+        </form>
+    </main>
+    <footer>
+        <p>&copy; 2024 Talk To The World</p>
+    </footer>
+    <script>
+        function signUp() {
+            const username = document.getElementById('signup-username').value.trim();
+            const password = document.getElementById('signup-password').value.trim();
+
+            if (!username || !password) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            localStorage.setItem('user', JSON.stringify({ username, password }));
+            alert("Signup successful! You can now log in.");
+            window.location.href = "login.html";
+        }
+    </script>
+</body>
+</html>
