@@ -3,133 +3,158 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Emergency Satellite Communication</title>
+  <title>Emergency Satellite Alignment</title>
   <style>
     body {
-      font-family: monospace;
+      font-family: Arial, sans-serif;
       text-align: center;
-      padding: 20px;
+      margin: 20px;
     }
-    .container {
-      margin-top: 20px;
+    .circle-container {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      margin: 20px auto;
     }
-    pre {
-      font-size: 16px;
-      line-height: 1.5;
+    .circle {
+      width: 100%;
+      height: 100%;
+      border: 2px solid black;
+      border-radius: 50%;
+      position: relative;
     }
-    .hidden {
-      display: none;
+    .arrow {
+      width: 10px;
+      height: 10px;
+      background-color: red;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .center {
+      width: 15px;
+      height: 15px;
+      background-color: blue;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
     button {
       padding: 10px 20px;
-      font-size: 16px;
       margin: 10px;
-      cursor: pointer;
+    }
+    #options {
+      display: none;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Emergency Satellite Communication</h1>
-    <p id="status">Calibrate your compass by moving your device in a figure-8 motion.</p>
-    <button id="startButton">Start Calibration</button>
-    <pre id="asciiArt" class="hidden">
-Searching for satellite...
-           *
-          /|\
-         / | \
-        *  |  *
-           |
-           |
-    </pre>
-    <p id="alignmentStatus" class="hidden">Alignment Status: Not aligned</p>
-    <button id="alignButton" class="hidden">Align with Satellite</button>
-    <button id="sendSmsButton" class="hidden">Send Emergency SMS</button>
-    <pre id="progressBar" class="hidden">[          ]</pre>
-    <p id="smsStatus" class="hidden"></p>
+  <h1>Emergency Satellite Alignment</h1>
+  <p id="status">Detecting device capabilities...</p>
+  <div id="circle-container" class="circle-container hidden">
+    <div class="circle">
+      <div class="center"></div>
+      <div class="arrow" id="arrow"></div>
+    </div>
   </div>
+  <button id="startButton" class="hidden">Start Alignment</button>
+  <div id="options">
+    <p>Your device doesn't support GPS or compass. Choose an alternative:</p>
+    <button id="useIP">Use IP for Location</button>
+    <button id="manualCompass">Enter Compass Direction</button>
+  </div>
+  <p id="result" class="hidden"></p>
 
   <script>
-    let compassCalibrated = false;
-    let alignmentAchieved = false;
+    const status = document.getElementById("status");
+    const startButton = document.getElementById("startButton");
+    const circleContainer = document.getElementById("circle-container");
+    const options = document.getElementById("options");
+    const arrow = document.getElementById("arrow");
+    const result = document.getElementById("result");
 
-    // ASCII Art Representation
-    const asciiArtNotAligned = `
-           *
-          /|\\
-         / | \\
-        *  |  *
-           |
-           |
-    `;
+    let compassAvailable = false;
+    let alignmentInterval;
+    let isAligned = false;
 
-    const asciiArtAligned = `
-           *
-          /|\\
-         / | \\
-        *  |  *
-           |
-        [Aligned!]
-    `;
-
-    // Start Calibration
-    document.getElementById("startButton").addEventListener("click", () => {
-      const status = document.getElementById("status");
-      status.textContent = "Calibrating... Move your device in a figure-8 motion.";
-      
-      setTimeout(() => {
-        compassCalibrated = true;
-        status.textContent = "Compass calibrated! Align with the satellite.";
-        document.getElementById("asciiArt").classList.remove("hidden");
-        document.getElementById("alignmentStatus").classList.remove("hidden");
-        document.getElementById("alignButton").classList.remove("hidden");
-        document.getElementById("asciiArt").textContent = asciiArtNotAligned;
-      }, 5000);
-    });
-
-    // Simulate Alignment
-    document.getElementById("alignButton").addEventListener("click", () => {
-      const alignmentStatus = document.getElementById("alignmentStatus");
-      const asciiArt = document.getElementById("asciiArt");
-      
-      if (!compassCalibrated) {
-        alert("Please calibrate your compass first!");
-        return;
-      }
-
-      // Simulate successful alignment
-      setTimeout(() => {
-        alignmentAchieved = true;
-        alignmentStatus.textContent = "Alignment Status: Aligned!";
-        asciiArt.textContent = asciiArtAligned;
-        document.getElementById("sendSmsButton").classList.remove("hidden");
-      }, 2000);
-    });
-
-    // Simulate Sending Emergency SMS with Connectivity Progress
-    document.getElementById("sendSmsButton").addEventListener("click", () => {
-      if (!alignmentAchieved) {
-        alert("Please align with the satellite first!");
-        return;
-      }
-
-      const progressBar = document.getElementById("progressBar");
-      const smsStatus = document.getElementById("smsStatus");
-      progressBar.classList.remove("hidden");
-      smsStatus.classList.add("hidden");
-
-      let progress = 0;
-      const interval = setInterval(() => {
-        progress += 10;
-        progressBar.textContent = `[${'='.repeat(progress / 10)}${' '.repeat(10 - progress / 10)}]`;
-        
-        if (progress >= 100) {
-          clearInterval(interval);
-          smsStatus.textContent = "Emergency SMS sent successfully!";
-          smsStatus.classList.remove("hidden");
-          progressBar.classList.add("hidden");
+    // Detect GPS and Compass Capabilities
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        () => {
+          if ('DeviceOrientationEvent' in window) {
+            compassAvailable = true;
+            status.textContent = "Your device has GPS and a compass.";
+            startButton.classList.remove("hidden");
+          } else {
+            status.textContent = "Your device has GPS but no compass.";
+            options.style.display = "block";
+          }
+        },
+        () => {
+          status.textContent = "Failed to detect GPS.";
+          options.style.display = "block";
         }
+      );
+    } else {
+      status.textContent = "Your device does not support GPS.";
+      options.style.display = "block";
+    }
+
+    // Simulate Arrow Movement
+    const startAlignment = () => {
+      let angle = Math.random() * 360;
+      circleContainer.classList.remove("hidden");
+      status.textContent = "Align the red dot with the center!";
+      alignmentInterval = setInterval(() => {
+        if (isAligned) return;
+        angle = (angle + Math.random() * 30 - 15) % 360;
+        arrow.style.transform = `translate(-50%, -50%) rotate(${angle}deg) translate(80px)`;
       }, 500);
+    };
+
+    startButton.addEventListener("click", () => {
+      startAlignment();
+      startButton.disabled = true;
+    });
+
+    // Simulate Alignment Success
+    circleContainer.addEventListener("click", () => {
+      if (Math.random() > 0.8) { // Simulate alignment success with 20% probability
+        isAligned = true;
+        clearInterval(alignmentInterval);
+        status.textContent = "Aligned successfully!";
+        result.textContent = "You can now connect to the satellite.";
+        result.classList.remove("hidden");
+      } else {
+        status.textContent = "Keep trying to align!";
+      }
+    });
+
+    // Alternative: Use IP for Location
+    document.getElementById("useIP").addEventListener("click", () => {
+      status.textContent = "Determining location from IP...";
+      fetch('https://ipapi.co/json/')
+        .then((response) => response.json())
+        .then((data) => {
+          status.textContent = `Location detected: ${data.city}, ${data.region}`;
+        })
+        .catch(() => {
+          status.textContent = "Failed to get location from IP.";
+        });
+    });
+
+    // Alternative: Manual Compass Entry
+    document.getElementById("manualCompass").addEventListener("click", () => {
+      const direction = prompt("Enter your compass direction (e.g., 90 for East):");
+      if (direction) {
+        status.textContent = `You are facing ${direction} degrees. Align manually with the satellite.`;
+        startButton.classList.remove("hidden");
+      }
     });
   </script>
 </body>
