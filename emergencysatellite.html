@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emergency Satellite Communication</title>
+  <style>
+    body {
+      font-family: monospace;
+      text-align: center;
+      padding: 20px;
+    }
+    .container {
+      margin-top: 20px;
+    }
+    pre {
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    .hidden {
+      display: none;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Emergency Satellite Communication</h1>
+    <p id="status">Calibrate your compass by moving your device in a figure-8 motion.</p>
+    <button id="startButton">Start Calibration</button>
+    <pre id="asciiArt" class="hidden">
+Searching for satellite...
+           *
+          /|\
+         / | \
+        *  |  *
+           |
+           |
+    </pre>
+    <p id="alignmentStatus" class="hidden">Alignment Status: Not aligned</p>
+    <button id="alignButton" class="hidden">Align with Satellite</button>
+    <button id="sendSmsButton" class="hidden">Send Emergency SMS</button>
+    <pre id="progressBar" class="hidden">[          ]</pre>
+    <p id="smsStatus" class="hidden"></p>
+  </div>
+
+  <script>
+    let compassCalibrated = false;
+    let alignmentAchieved = false;
+
+    // ASCII Art Representation
+    const asciiArtNotAligned = `
+           *
+          /|\\
+         / | \\
+        *  |  *
+           |
+           |
+    `;
+
+    const asciiArtAligned = `
+           *
+          /|\\
+         / | \\
+        *  |  *
+           |
+        [Aligned!]
+    `;
+
+    // Start Calibration
+    document.getElementById("startButton").addEventListener("click", () => {
+      const status = document.getElementById("status");
+      status.textContent = "Calibrating... Move your device in a figure-8 motion.";
+      
+      setTimeout(() => {
+        compassCalibrated = true;
+        status.textContent = "Compass calibrated! Align with the satellite.";
+        document.getElementById("asciiArt").classList.remove("hidden");
+        document.getElementById("alignmentStatus").classList.remove("hidden");
+        document.getElementById("alignButton").classList.remove("hidden");
+        document.getElementById("asciiArt").textContent = asciiArtNotAligned;
+      }, 5000);
+    });
+
+    // Simulate Alignment
+    document.getElementById("alignButton").addEventListener("click", () => {
+      const alignmentStatus = document.getElementById("alignmentStatus");
+      const asciiArt = document.getElementById("asciiArt");
+      
+      if (!compassCalibrated) {
+        alert("Please calibrate your compass first!");
+        return;
+      }
+
+      // Simulate successful alignment
+      setTimeout(() => {
+        alignmentAchieved = true;
+        alignmentStatus.textContent = "Alignment Status: Aligned!";
+        asciiArt.textContent = asciiArtAligned;
+        document.getElementById("sendSmsButton").classList.remove("hidden");
+      }, 2000);
+    });
+
+    // Simulate Sending Emergency SMS with Connectivity Progress
+    document.getElementById("sendSmsButton").addEventListener("click", () => {
+      if (!alignmentAchieved) {
+        alert("Please align with the satellite first!");
+        return;
+      }
+
+      const progressBar = document.getElementById("progressBar");
+      const smsStatus = document.getElementById("smsStatus");
+      progressBar.classList.remove("hidden");
+      smsStatus.classList.add("hidden");
+
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += 10;
+        progressBar.textContent = `[${'='.repeat(progress / 10)}${' '.repeat(10 - progress / 10)}]`;
+        
+        if (progress >= 100) {
+          clearInterval(interval);
+          smsStatus.textContent = "Emergency SMS sent successfully!";
+          smsStatus.classList.remove("hidden");
+          progressBar.classList.add("hidden");
+        }
+      }, 500);
+    });
+  </script>
+</body>
+</html>
