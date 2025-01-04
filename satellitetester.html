@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emergency Satellite Communication</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    .container {
+      margin-top: 50px;
+    }
+    #status {
+      font-weight: bold;
+      margin: 20px 0;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Emergency Satellite Communication</h1>
+    <p>Finding the nearest satellite...</p>
+    <p id="status">Searching...</p>
+    <button id="alignButton" class="hidden">Align with Satellite</button>
+    <button id="sendSmsButton" class="hidden">Send Emergency SMS</button>
+    <p id="smsStatus" class="hidden"></p>
+  </div>
+
+  <script>
+    // Simulate satellite search
+    setTimeout(() => {
+      const status = document.getElementById("status");
+      status.textContent = "Satellite found!";
+      const alignButton = document.getElementById("alignButton");
+      alignButton.classList.remove("hidden");
+    }, 3000);
+
+    document.getElementById("alignButton").addEventListener("click", () => {
+      const alignButton = document.getElementById("alignButton");
+      alignButton.textContent = "Aligning...";
+      setTimeout(() => {
+        alignButton.textContent = "Aligned!";
+        const sendSmsButton = document.getElementById("sendSmsButton");
+        sendSmsButton.classList.remove("hidden");
+      }, 2000);
+    });
+
+    document.getElementById("sendSmsButton").addEventListener("click", () => {
+      const sendSmsButton = document.getElementById("sendSmsButton");
+      const smsStatus = document.getElementById("smsStatus");
+      sendSmsButton.textContent = "Sending...";
+      setTimeout(() => {
+        sendSmsButton.textContent = "Send Emergency SMS";
+        smsStatus.textContent = "Emergency SMS sent to your family!";
+        smsStatus.classList.remove("hidden");
+      }, 2000);
+    });
+  </script>
+</body>
+</html>
