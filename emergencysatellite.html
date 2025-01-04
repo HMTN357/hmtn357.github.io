@@ -48,7 +48,6 @@
       margin: 10px;
     }
     #options {
-      display: none;
       margin-top: 20px;
     }
   </style>
@@ -63,7 +62,7 @@
     </div>
   </div>
   <button id="startButton" class="hidden">Start Alignment</button>
-  <div id="options">
+  <div id="options" class="hidden">
     <p>Your device doesn't support GPS or compass. Choose an alternative:</p>
     <button id="useIP">Use IP for Location</button>
     <button id="manualCompass">Enter Compass Direction</button>
@@ -92,20 +91,20 @@
             startButton.classList.remove("hidden");
           } else {
             status.textContent = "Your device has GPS but no compass.";
-            options.style.display = "block";
+            options.classList.remove("hidden");
           }
         },
         () => {
           status.textContent = "Failed to detect GPS.";
-          options.style.display = "block";
+          options.classList.remove("hidden");
         }
       );
     } else {
       status.textContent = "Your device does not support GPS.";
-      options.style.display = "block";
+      options.classList.remove("hidden");
     }
 
-    // Simulate Arrow Movement
+    // Simulate Arrow Movement with Compass
     const startAlignment = () => {
       let angle = Math.random() * 360;
       circleContainer.classList.remove("hidden");
@@ -113,7 +112,10 @@
       alignmentInterval = setInterval(() => {
         if (isAligned) return;
         angle = (angle + Math.random() * 30 - 15) % 360;
-        arrow.style.transform = `translate(-50%, -50%) rotate(${angle}deg) translate(80px)`;
+        const radians = (angle * Math.PI) / 180;
+        const x = Math.cos(radians) * 80;
+        const y = Math.sin(radians) * 80;
+        arrow.style.transform = `translate(${x}px, ${y}px)`;
       }, 500);
     };
 
