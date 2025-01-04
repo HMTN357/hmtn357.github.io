@@ -66,6 +66,7 @@
     <p>Your device doesn't support GPS or compass. Choose an alternative:</p>
     <button id="useIP">Use IP for Location</button>
     <button id="manualCompass">Enter Compass Direction</button>
+    <button id="faceSatellite">Face the Satellite</button>
   </div>
   <p id="result" class="hidden"></p>
 
@@ -80,6 +81,7 @@
     let compassAvailable = false;
     let alignmentInterval;
     let isAligned = false;
+    let currentDirection = 0; // Default facing direction (degrees)
 
     // Detect GPS and Compass Capabilities
     if ('geolocation' in navigator) {
@@ -154,9 +156,19 @@
     document.getElementById("manualCompass").addEventListener("click", () => {
       const direction = prompt("Enter your compass direction (e.g., 90 for East):");
       if (direction) {
+        currentDirection = parseFloat(direction);
         status.textContent = `You are facing ${direction} degrees. Align manually with the satellite.`;
         startButton.classList.remove("hidden");
       }
+    });
+
+    // Face the Satellite
+    document.getElementById("faceSatellite").addEventListener("click", () => {
+      const satelliteDirection = Math.floor(Math.random() * 360);
+      status.textContent = `The satellite is at ${satelliteDirection} degrees.`;
+      const turnDirection = satelliteDirection > currentDirection ? 'right' : 'left';
+      const degreesToTurn = Math.abs(satelliteDirection - currentDirection);
+      alert(`Turn ${turnDirection} by ${degreesToTurn} degrees to face the satellite.`);
     });
   </script>
 </body>
